@@ -1,0 +1,47 @@
+**Market Sentiment:** positive
+
+Here is a merged version of the partial macro summaries into one coherent, professional research note:
+
+**Executive Summary**
+
+The market has experienced a significant rally, with the QQQ index rising by 3% in a reversal. Despite this, retail investors are adding to their positions on dips, suggesting a mismatch between expected outcomes and actual price movements. The narrative surrounding Bitcoin and crypto assets suggests that they may be leading the market lower due to lack of liquidity and negative catalysts.
+
+The Fed's monetary policy is seen as less impactful than expected, with no rate cuts in December and a shift towards January. Carry trades are working well, but this does not seem to be driving macro-level changes. Japan's term premium is steep but not excessive, with a difference of around 200-300 basis points between long-dated bonds and the benchmark 10-year yield.
+
+**Economic Mechanisms**
+
+The rally in the QQQ index can be attributed to a combination of factors, including retail investor behavior and carry trades. However, the market's behavior is puzzling, as retail investors are adding to their positions on dips, suggesting a mismatch between expected outcomes and actual price movements.
+
+The Fed's monetary policy is seen as less impactful than expected, with no rate cuts in December and a shift towards January. This is puzzling, given the expectation of mechanical tightening from the Fed's actions. Carry trades are working well, which suggests that investors are focused on short-term gains rather than macro-level changes.
+
+Japan's fiscal policies are becoming more aggressive, with a 3% of GDP supplementary budget proposed by the government. The Bank of Japan (BOJ) may intervene in the market to slow down the yen's appreciation and maintain control over inflation. However, given the BOJ's desire to keep inflation under control, a hike in interest rates is unlikely.
+
+**Market Implications / Trade Ideas**
+
+* **Bitcoin and Crypto**: Consider going short on Bitcoin and crypto assets due to lack of liquidity and negative catalysts.
+* **QQQ Index**: Consider going long on the QQQ index due to its reversal, but be cautious of potential stop-losses as retail investors may continue to add to their positions.
+* **Carry Trades**: Continue to focus on carry trades, which are working well in this environment.
+* **Macro Implications**: Be cautious of macro-level changes, as the Fed's monetary policy does not seem to be having a significant impact.
+
+**Narrative**
+
+The current macro narrative suggests that there is no underlying issue driving the market lower. The lack of liquidity in crypto assets and the Fed's monetary policy being less impactful than expected do not provide a clear reason for the market's behavior. However, it appears that investors are focused on short-term gains rather than macro-level changes. Retail investors are adding to their positions on dips, which may lead to further price increases.
+
+In contrast, Japan's fiscal policies and the BOJ's monetary policy suggest that there is an underlying issue driving the yen's appreciation. The Japanese term premium is steep but not excessive, suggesting that investors are willing to accept a higher return to compensate for the risk associated with Japan's high debt burden.
+
+The narrative around monetary policy is also becoming increasingly important, as central banks face challenges in responding to economic conditions due to their constrained mandates and balance sheets.
+
+**Market Reaction to Fed Decision**
+
+The expected rate cut by the Fed could lead to a negative correlation between bond yields and stock prices. Market reaction to the Fed's decision will likely be muted, with investors focusing on 2026 and the shape of the yield curve.
+
+**Trade Ideas**
+
+* Buy the dollar against a strong US economy, as the correlation between the dollar and rates differentials has returned to its historical high.
+* Short the US stock market or take a neutral stance, as the expected rate cut may lead to a negative correlation between bond yields and stock prices.
+
+**Narrative**
+
+The current macroeconomic narrative is that printing money and using fiscal deficits can be an effective way to drive economic growth. The discussion highlights the growing trend of unconventional monetary policies around the world, particularly in countries with emerging economies.
+
+However, there are risks associated with this approach, including inflation, debt levels, and the potential for asset bubbles. Markets will be closely watching the development of this narrative in 2026, particularly with regards to Trump's potential use of fiscal stimulus to try to win the midterms.

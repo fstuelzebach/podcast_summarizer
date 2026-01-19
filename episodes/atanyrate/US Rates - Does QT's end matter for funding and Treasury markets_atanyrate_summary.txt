@@ -1,0 +1,30 @@
+**Market Sentiment:** positive
+
+Here is a merged version of the partial macro summaries into one coherent, professional research note, maintaining the 4-section structure (Executive Summary, Economic Mechanisms, Market Implications / Trade Ideas, Narrative):
+
+**Executive Summary**
+
+The current rates market is being driven by a combination of factors, including economic data scarcity, headlines coming out of Washington, and bank earnings announcements. Volatility in funding markets and repo trading has increased, with sofa trading reaching levels not seen since 2019. The SRF facility was used to meet temporary liquidity shortages, but its effectiveness is still a topic of debate. As the Fed's balance sheet runoff is expected to end in coming months, market participants' expectations for QT ending have shifted forward, but the impact on yields should be limited.
+
+Our fundamental outlook on rates has not changed materially, and we expect 10-year yields to rise roughly nine basis points for every one percentage point decline in balance sheet size as a share of GDP. However, with the yield curve still too flat, swap spreads at the long end of the curve have been overdone. Inflation markets remain relatively cheap, but the extent of the weakness has been surprising.
+
+**Economic Mechanisms**
+
+The current rates market is being driven by a combination of factors, including economic data scarcity, headlines coming out of Washington, and bank earnings announcements. Volatility in funding markets and repo trading has increased, with sofa trading reaching levels not seen since 2019. The SRF facility was used to meet temporary liquidity shortages, but its effectiveness is still a topic of debate.
+
+The Fed's balance sheet runoff is expected to end in coming months, but its impact on funding pressures may be limited. According to Theresa Ho, the take-up at the SRF facility this week was only $6.5 billion on Wednesday and $8 billion on Thursday, which suggests that there is still some hesitation in using it. The Treasury General Account Balance and Money Fund AUMs are subject to larger fluctuations, which could overshadow the impact of balance sheet runoff.
+
+**Market Implications / Trade Ideas**
+
+Based on the discussion, we can identify several trade ideas:
+
+1. **Long-term rates:** Long-term rates are likely to rise as QT ends and the Fed's balance sheet size decreases. We recommend buying long-term bonds or ETFs that track the 10-year yield curve.
+2. **Dollar yield curve:** The dollar yield curve has been experiencing volatility due to funding market pressures. We recommend selling short-term dollar yields and buying longer-dated dollar yields.
+3. **Inflation markets:** Inflation markets remain relatively cheap, and investors may consider taking advantage of this by buying inflation-indexed instruments or shorting break-evens.
+4. **SRF facility:** Given the uncertainty surrounding the SRF facility, we recommend taking a neutral stance on its effectiveness.
+
+**Narrative**
+
+The current macro narrative suggests that economic growth is slowing, and investors are becoming increasingly sensitive to funding market pressures. However, major fundamental cracks are not emerging, despite some regional bank news indicating weakness in the sector. The yield curve remains flat, and swap spreads at the long end of the curve have been overdone.
+
+Inflation markets have been weak, but the extent of the weakness has been surprising, with oil prices being a significant contributor to the decline. Break-even inflation expectations remain relatively cheap versus fair value models, suggesting that the market may be undervaluing inflation risks. Overall, the current macro narrative suggests a cautious outlook, with investors needing to weigh the risks and rewards of different investment opportunities in this uncertain economic environment.

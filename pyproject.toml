@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "podcast-summarizer-pipeline"
+version = "0.1.0"
+description = "Podcast transcription and summarization pipeline"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{ include = "podcast_summarizer_pipeline" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+openai-whisper = "^20250625"
+transformers = "^4.57.6"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

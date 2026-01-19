@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.env
+
+# Poetry
+.poetry/
+
+# Data
+episodes/**/*.mp3
+episodes/**/*.pdf
+
+# IDE
+.idea/
+.vscode/
