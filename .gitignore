@@ -7,6 +7,7 @@ __pycache__/
 .poetry/
 
 # Data
+episodes/**/*.txt
 episodes/**/*.mp3
 episodes/**/*.pdf
 
