@@ -1,16 +1,16 @@
 import logging
 import feedparser
 
-from .config import PODCASTS, NUM_EPISODES, BASE_DIR
+from .config import PODCASTS, NUM_EPISODES, BASE_DIR, LLM_BACKEND, LLM_MODEL
 from .rss import download_episode
 from .transcribe import Transcriber
-from .summarize import summarize_with_llama
+from .summarize import summarize
 
 logger = logging.getLogger("podcast_pipeline.pipeline")
 
 
 def run_pipeline() -> None:
-    logger.info("Starting podcast summarization pipeline")
+    logger.info("Starting pipeline backend=%s model=%s", LLM_BACKEND, LLM_MODEL)
 
     transcriber = Transcriber()
 
@@ -32,12 +32,15 @@ def run_pipeline() -> None:
             logger.info("Transcribing %s", mp3.name)
             txt = transcriber.transcribe(mp3)
 
-            logger.info("Summarizing transcript %s", txt.name)
-            summary = summarize_with_llama(txt.read_text(encoding="utf-8"))
+            logger.info("Summarizing %s", txt.name)
+            summary = summarize(
+                txt.read_text(encoding="utf-8"),
+                backend=LLM_BACKEND,
+                model=LLM_MODEL,
+            )
 
             summary_path = txt.with_name(f"{txt.stem}_summary.txt")
             summary_path.write_text(summary, encoding="utf-8")
-
             logger.info("Summary written to %s", summary_path)
 
-    logger.info("Pipeline finished successfully")
+    logger.info("Pipeline finished")

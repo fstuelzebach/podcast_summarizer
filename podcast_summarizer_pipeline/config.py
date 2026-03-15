@@ -1,15 +1,24 @@
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
-# RSS feeds to ingest
+load_dotenv()
+
+# Paths
+BASE_DIR = Path(__file__).parent.parent / "episodes"
+BASE_DIR.mkdir(parents=True, exist_ok=True)
+
+# Pipeline
+NUM_EPISODES = 3
 PODCASTS = {
     "macrotradingfloor": "https://feeds.megaphone.fm/ALFINVESTMENTSTRATEGYBV2974145286",
     # "globaldatapod": "https://feed.podbean.com/globaldatapod/feed.xml",
-    # "streetsignals": "https://www.omnycontent.com/d/playlist/...",
+     "streetsignals": "https://www.omnycontent.com/d/playlist/...",
 }
 
-# How many recent episodes per podcast
-NUM_EPISODES = 3
+# LLM backend — switch here without touching other code
+LLM_BACKEND = os.getenv("LLM_BACKEND", "ollama")   # "ollama" | "claude"
+LLM_MODEL   = os.getenv("LLM_MODEL", None)          # None = use provider default
 
-# Where all audio + text artifacts live
-BASE_DIR = Path("episodes")
-BASE_DIR.mkdir(parents=True, exist_ok=True)
+# Anthropic (only needed if LLM_BACKEND=claude)
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
