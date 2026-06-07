@@ -1,15 +1,21 @@
 [tool.poetry]
-name = "podcast-summarizer-pipeline"
+name = "podcast-summarizer"
 version = "0.1.0"
-description = "Podcast transcription and summarization pipeline"
-authors = ["Your Name <you@example.com>"]
+description = "Podcast transcription and summarization tool"
+authors = ["fstuelzebach"]
 readme = "README.md"
-packages = [{ include = "podcast_summarizer_pipeline" }]
+packages = [{ include = "podcast_summarizer" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 openai-whisper = "^20250625"
-transformers = "^4.57.6"
+feedparser = "^6.0"
+requests = "^2.31"
+python-dotenv = "^1.0"
+anthropic = { version = "^0.40", optional = true }
+
+[tool.poetry.extras]
+claude = ["anthropic"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0"

@@ -2,7 +2,7 @@ import logging
 import subprocess
 from typing import List, Protocol
 
-logger = logging.getLogger("podcast_pipeline.summarize")
+logger = logging.getLogger("podcast_summarizer.summarize")
 
 MAX_CHARS = 8000
 

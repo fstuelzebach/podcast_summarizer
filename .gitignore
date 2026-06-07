@@ -1,14 +1,15 @@
 # Python
 __pycache__/
 *.pyc
+.venv/
+
+# Secrets
 .env
 
-# Poetry
-.poetry/
-
-# Data
-episodes/**/*.txt
+# Data (generated)
 episodes/**/*.mp3
+episodes/**/*.txt
+episodes/**/*.meta.json
 episodes/**/*.pdf
 
 # IDE

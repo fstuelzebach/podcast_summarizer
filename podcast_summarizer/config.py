@@ -9,11 +9,13 @@ BASE_DIR = Path(__file__).parent.parent / "episodes"
 BASE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Pipeline
-NUM_EPISODES = 3
+NUM_EPISODES = 2
 PODCASTS = {
-    "macrotradingfloor": "https://feeds.megaphone.fm/ALFINVESTMENTSTRATEGYBV2974145286",
+    #"macrotradingfloor": "https://feeds.megaphone.fm/ALFINVESTMENTSTRATEGYBV2974145286",
     # "globaldatapod": "https://feed.podbean.com/globaldatapod/feed.xml",
-     "streetsignals": "https://www.omnycontent.com/d/playlist/...",
+    "streetsignals":     "https://omny.fm/shows/street-signals/playlists/podcast.rss",
+    #"howardmarks":   "https://rss.art19.com/the-memo-by-howard-marks",
+    #"saxomarketcall": "https://feed.podbean.com/saxostrats/feed.xml",
 }
 
 # LLM backend — switch here without touching other code

@@ -1,7 +1,7 @@
 import logging
 
-from .logging_config import setup_logging
 from .pipeline import run_pipeline
+from .logging_config import setup_logging
 
 
 def main() -> None:

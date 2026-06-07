@@ -1,3 +1,4 @@
+import json
 import logging
 import feedparser
 
@@ -6,7 +7,20 @@ from .rss import download_episode
 from .transcribe import Transcriber
 from .summarize import summarize
 
-logger = logging.getLogger("podcast_pipeline.pipeline")
+logger = logging.getLogger("podcast_summarizer.pipeline")
+
+
+def _read_published(mp3: "Path") -> str:
+    """Read publish date from sidecar .meta.json. Returns 'unknown' if missing."""
+    meta_path = mp3.with_suffix("").with_suffix(".meta.json")  # strips .mp3, adds .meta.json
+    # handle double suffix: title_podcast.mp3 -> title_podcast.meta.json
+    stem = mp3.stem  # e.g. "EpisodeTitle_macrotradingfloor"
+    meta_path = mp3.parent / f"{stem}.meta.json"
+    try:
+        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        return meta.get("published") or "unknown"
+    except (FileNotFoundError, json.JSONDecodeError):
+        return "unknown"
 
 
 def run_pipeline() -> None:
@@ -29,6 +43,9 @@ def run_pipeline() -> None:
                 logger.warning("Skipping episode (no audio): %s", entry.title)
                 continue
 
+            published = _read_published(mp3)
+            logger.info("Episode published=%s", published)
+
             logger.info("Transcribing %s", mp3.name)
             txt = transcriber.transcribe(mp3)
 
@@ -39,7 +56,8 @@ def run_pipeline() -> None:
                 model=LLM_MODEL,
             )
 
-            summary_path = txt.with_name(f"{txt.stem}_summary.txt")
+            # Summary filename includes publish date: EpisodeTitle_podcast_2026-03-15_summary.txt
+            summary_path = txt.with_name(f"{txt.stem}_{published}_summary.txt")
             summary_path.write_text(summary, encoding="utf-8")
             logger.info("Summary written to %s", summary_path)
 
