@@ -6,16 +6,45 @@ Fetches the latest episodes from configured RSS feeds, transcribes them with [Wh
 
 ## How it works
 
-1. **RSS fetch** — pulls the N most recent episodes from each enabled podcast feed
-2. **Download** — streams the MP3 and writes a `.meta.json` sidecar with title, publish date, and source URL
-3. **Transcribe** — runs Whisper locally to produce a `.txt` transcript (cached; skipped on re-runs)
-4. **Summarize** — sends the transcript (chunked at 8 000 chars) to an LLM and merges partials into a 4-section research note:
-   - Executive Summary
-   - Economic Mechanisms
-   - Market Implications / Trade Ideas
-   - Narrative
-
-Output files land in `episodes/{podcast_name}/`.
+```
+config.py (PODCASTS dict)
+        │
+        ▼
+  ┌─────────────┐
+  │  RSS fetch  │  feedparser reads each enabled feed URL
+  └──────┬──────┘
+         │  feed.entries[:NUM_EPISODES]
+         ▼
+  ┌─────────────┐
+  │   Download  │  streams MP3 → episodes/{podcast}/{title}_{podcast}.mp3
+  │             │  writes sidecar  → .meta.json  (title, date, URL)
+  └──────┬──────┘
+         │  skip if already on disk
+         ▼
+  ┌─────────────┐
+  │  Transcribe │  Whisper (local) → .txt
+  │             │  cached — re-runs skip this step
+  └──────┬──────┘
+         │  raw transcript text
+         ▼
+  ┌──────────────────────────────────────────┐
+  │               Summarize                  │
+  │                                          │
+  │  split into 8 000-char chunks            │
+  │      │                                   │
+  │      ▼                                   │
+  │  LLM (Ollama or Claude)                  │
+  │  prompt each chunk → partial summary     │
+  │      │                                   │
+  │      ▼  (if >1 chunk)                    │
+  │  LLM merge prompt → final summary        │
+  └──────┬───────────────────────────────────┘
+         │
+         ▼
+  {title}_{podcast}_{YYYY-MM-DD}_summary.txt
+  (4 sections: Executive Summary · Economic Mechanisms
+               Market Implications · Narrative)
+```
 
 ---
 
