@@ -14,6 +14,21 @@ requests = "^2.31"
 python-dotenv = "^1.0"
 anthropic = { version = "^0.40", optional = true }
 
+# Intel Macs: PyTorch stopped shipping x86_64 macOS wheels after 2.2.2, and newer
+# llvmlite (numba) has none either. These caps apply only there; other platforms are unchanged.
+torch = [
+    { version = "2.2.2", markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'" },
+    { version = "*", markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'" },
+]
+numpy = [
+    { version = "<2", markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'" },
+    { version = "*", markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'" },
+]
+llvmlite = [
+    { version = "<0.45", markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'" },
+    { version = "*", markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'" },
+]
+
 [tool.poetry.extras]
 claude = ["anthropic"]
 
