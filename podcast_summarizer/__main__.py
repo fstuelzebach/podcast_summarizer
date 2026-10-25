@@ -17,14 +17,10 @@ def main() -> int:
 
     setup_logging(logging.DEBUG if args.verbose else logging.INFO)
     from . import pipeline
-    from .config import load_podcasts
 
     cmd = args.cmd or "ingest"
     if cmd == "ingest":
-        pods = load_podcasts()
-        if getattr(args, "only", None):
-            pods = [p for p in load_podcasts(include_disabled=True) if p.key in args.only]
-        result = pipeline.ingest(pods)
+        result = pipeline.ingest(only=args.only or None)
         return 1 if result.failures else 0
     if cmd == "summarize":
         print(f"{pipeline.summarize_pending()} summaries written")

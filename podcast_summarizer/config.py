@@ -24,7 +24,14 @@ DATA_DIR = Path(os.getenv("DATA_DIR") or REPO_DIR).expanduser().resolve()
 BASE_DIR = DATA_DIR / "episodes"
 BASE_DIR.mkdir(parents=True, exist_ok=True)
 STATE_DIR = DATA_DIR / "state"
-SOURCES_FILE = Path(os.getenv("SOURCES_FILE") or REPO_DIR / "conf" / "sources.toml")
+# Podcast list lives in the data repo (pulled before every run), so editing it there
+# is enough; conf/sources.example.toml in this repo is the fallback/template.
+SOURCES_FILE = Path(
+    os.getenv("SOURCES_FILE")
+    or next((p for p in (DATA_DIR / "conf" / "sources.toml",
+                         REPO_DIR / "conf" / "sources.example.toml") if p.exists()),
+            REPO_DIR / "conf" / "sources.example.toml")
+)
 LOCK_FILE = REPO_DIR / "logs" / "ingest.lock"
 
 # ---------------------------------------------------------------------------
@@ -73,12 +80,15 @@ class Podcast:
     num_episodes: int
 
 
-def load_podcasts(path: Path = SOURCES_FILE, include_disabled: bool = False) -> list[Podcast]:
+def load_podcasts(path: Path | None = None, include_disabled: bool = False) -> list[Podcast]:
+    path = path or SOURCES_FILE
     data = tomllib.loads(path.read_text(encoding="utf-8"))
     default_n = data.get("defaults", {}).get("num_episodes", 3)
     out = []
     for key, cfg in data.get("podcasts", {}).items():
         if not include_disabled and not cfg.get("enabled", True):
+            continue
+        if not cfg.get("url"):
             continue
         out.append(Podcast(
             key=key,

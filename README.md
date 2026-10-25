@@ -44,7 +44,7 @@ python -m podcast_summarizer summarize         # optional: old local Ollama/Clau
 
 ## Configuration
 
-- **Podcasts**: `conf/sources.toml` (`enabled`, `url`, `house`, `num_episodes`).
+- **Podcasts**: `conf/sources.toml` in the data repo (template: `conf/sources.example.toml`) (`enabled`, `url`, `house`, `num_episodes`).
   `house` is how the prompts group sources ("all State Street = one house").
 - **Runtime**: `.env`; see `.env.example`. The main switches:
 

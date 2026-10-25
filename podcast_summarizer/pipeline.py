@@ -91,7 +91,7 @@ def _notify(result: IngestResult) -> None:
         )
 
 
-def ingest(podcasts: list[Podcast] | None = None) -> IngestResult:
+def ingest(podcasts: list[Podcast] | None = None, only: list[str] | None = None) -> IngestResult:
     started = time.monotonic()
     result = IngestResult()
     repo = DataRepo(config.DATA_DIR, branch=config.DATA_BRANCH)
@@ -107,8 +107,13 @@ def ingest(podcasts: list[Podcast] | None = None) -> IngestResult:
                 logger.info("Standby: primary published recently — nothing to do")
                 return result
 
+            # Load the podcast list only after the pull, so edits in the data repo apply
+            if podcasts is None:
+                podcasts = (load_podcasts(include_disabled=True) if only else load_podcasts())
+                if only:
+                    podcasts = [p for p in podcasts if p.key in only]
             transcriber = Transcriber(config.WHISPER_MODEL, config.WHISPER_ENGINE)
-            for pod in podcasts if podcasts is not None else load_podcasts():
+            for pod in podcasts:
                 folder = config.BASE_DIR / pod.key
                 folder.mkdir(parents=True, exist_ok=True)
                 try:

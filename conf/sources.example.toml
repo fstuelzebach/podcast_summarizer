@@ -1,3 +1,6 @@
+# TEMPLATE. The live list is conf/sources.toml in the private data repo
+# (financial_research_data), which every ingest run pulls first.
+#
 # Podcast sources for `python -m podcast_summarizer ingest`.
 #
 # key        = folder name under episodes/ and filename suffix (keep stable — renaming
