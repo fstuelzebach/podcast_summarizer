@@ -1,4 +1,0 @@
-Dominant Sentiment: negative
-
-- negative: 0.776
-- neutral: 0.759

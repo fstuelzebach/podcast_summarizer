@@ -1,5 +1,0 @@
-Dominant Sentiment: neutral
-
-- negative: 0.764
-- neutral: 0.785
-- positive: 0.784

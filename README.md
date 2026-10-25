@@ -1,140 +1,96 @@
 # Podcast Summarizer
 
-Fetches the latest episodes from configured RSS feeds, transcribes them with [Whisper](https://github.com/openai/whisper), and produces a structured macro research summary using a local Ollama model or the Claude API.
+Turns macro/markets podcasts into research in Notion, without anyone pressing a button.
 
----
+- **Servers** (Hetzner VPS, Windows PC as standby) fetch new episodes and transcribe
+  them: the feed's own transcript when there is one, otherwise
+  [faster-whisper](https://github.com/SYSTRAN/faster-whisper) on CPU. Transcripts go to
+  the private repo `financial_research_data`.
+- **Scheduled Claude Code routines** read those transcripts and write the research:
+  a briefing per episode (and per newsletter under the Gmail label `Research`), a daily
+  digest, a weekly Regime Synthesis and a monthly Client Pitch Brief. All of it is filed in the
+  Notion *Resources* database, with pushes via ntfy and Gmail. The prompts live in the
+  data repo under `prompts/`.
 
-## How it works
+No Claude API key is needed: the writing happens in routines on the Claude subscription.
 
 ```
-config.py (PODCASTS dict)
-        │
-        ▼
-  ┌─────────────┐
-  │  RSS fetch  │  feedparser reads each enabled feed URL
-  └──────┬──────┘
-         │  feed.entries[:NUM_EPISODES]
-         ▼
-  ┌─────────────┐
-  │   Download  │  streams MP3 → episodes/{podcast}/{title}_{podcast}.mp3
-  │             │  writes sidecar  → .meta.json  (title, date, URL)
-  └──────┬──────┘
-         │  skip if already on disk
-         ▼
-  ┌─────────────┐
-  │  Transcribe │  Whisper (local) → .txt
-  │             │  cached — re-runs skip this step
-  └──────┬──────┘
-         │  raw transcript text
-         ▼
-  ┌──────────────────────────────────────────┐
-  │               Summarize                  │
-  │                                          │
-  │  split into 8 000-char chunks            │
-  │      │                                   │
-  │      ▼                                   │
-  │  LLM (Ollama or Claude)                  │
-  │  prompt each chunk → partial summary     │
-  │      │                                   │
-  │      ▼  (if >1 chunk)                    │
-  │  LLM merge prompt → final summary        │
-  └──────┬───────────────────────────────────┘
-         │
-         ▼
-  {title}_{podcast}_{YYYY-MM-DD}_summary.txt
-  (4 sections: Executive Summary · Economic Mechanisms
-               Market Implications · Narrative)
+ VPS cron 03:00/15:00 UTC                    Claude Code routines (Europe/Berlin)
+ (Windows "Podcast-Ingest" = standby)        ────────────────────────────────────
+ ──────────────────────────────              daily 07:00   research-digest
+ RSS ─► feed transcript? ─► faster-whisper     new transcripts ─► briefing ─► Notion
+   │                            │              Gmail "Research"  ─► briefing ─► Notion
+   ▼                            ▼              Daily Digest ─► Notion · ntfy · Gmail
+ episodes/<podcast>/<title>_<podcast>.txt    Sat 09:00     research-regime ─► Notion …
+                 + .meta.json (date, URL)    1st 09:00     research-pitch  ─► Notion …
+   │
+   ▼  git push ─► financial_research_data (private) ─► read by the routines
+      + state/heartbeat.json (standby host + digest check it)
 ```
 
----
-
-## Requirements
-
-- Python 3.10+
-- [Whisper](https://github.com/openai/whisper): `pip install openai-whisper`
-- [ffmpeg](https://ffmpeg.org/) on PATH (Whisper dependency)
-- **Ollama backend** (default): [Ollama](https://ollama.com/) installed and running, e.g. `ollama pull llama3.2:3b`
-- **Claude backend** (optional): `pip install anthropic` + an `ANTHROPIC_API_KEY` in `.env`
+Dedup: every briefing stores the episode URL in Notion's `URL` property, and the
+routine skips URLs that are already there.
 
 ---
 
-## Installation
+## Commands
 
 ```bash
-git clone https://github.com/fstuelzebach/podcast_summarizer.git
-cd podcast_summarizer
-pip install -e .
-cp .env.example .env   # then fill in your values
+python -m podcast_summarizer ingest            # fetch + transcribe + publish
+python -m podcast_summarizer ingest --only streetsignals
+python -m podcast_summarizer status            # role, heartbeat, counts per podcast
+python -m podcast_summarizer summarize         # optional: old local Ollama/Claude-API summaries
 ```
-
----
 
 ## Configuration
 
-### Podcasts
+- **Podcasts**: `conf/sources.toml` (`enabled`, `url`, `house`, `num_episodes`).
+  `house` is how the prompts group sources ("all State Street = one house").
+- **Runtime**: `.env`; see `.env.example`. The main switches:
 
-Edit `podcast_summarizer/config.py` — uncomment feeds to enable them:
-
-```python
-PODCASTS = {
-    "streetsignals": "https://omny.fm/shows/street-signals/playlists/podcast.rss",
-    # "macrotradingfloor": "https://feeds.megaphone.fm/...",
-    # "globaldatapod":     "https://feed.podbean.com/...",
-}
-
-NUM_EPISODES = 2   # how many recent episodes to process per podcast
-```
-
-### LLM backend
-
-Set in `.env`:
-
-```env
-LLM_BACKEND=ollama          # "ollama" (local) or "claude" (API)
-LLM_MODEL=llama3.2:3b       # optional model override; omit to use provider default
-ANTHROPIC_API_KEY=sk-ant-…  # only required when LLM_BACKEND=claude
-```
-
-| Backend | Default model | Requires |
+| Var | VPS | Windows PC |
 |---|---|---|
-| `ollama` | `llama3.2:3b` | Ollama running locally |
-| `claude` | `claude-haiku-4-5-20251001` | `ANTHROPIC_API_KEY` in `.env` |
+| `DATA_DIR` | `~/financial_research_data` | `D:\financial_research_data` |
+| `PUBLISH` | `1` | `1` |
+| `HOST_ROLE` | `primary` | `standby` |
+| `WHISPER_MODEL` | `small` | `small` or `medium` |
+| `NTFY_TOPIC` | your topic | your topic |
 
----
+## Hosts
 
-## Running
+**VPS (primary).** `bash deploy/install_vps.sh` clones code and data, sets up a deploy
+key (write access) for the data repo, a venv, `.env`, and the cron line.
+
+**Windows PC (standby).** `.\deploy\setup_windows_task.ps1` (admin) registers
+`Podcast-Ingest` (04:30 + 16:30, wakes the PC). As standby it exits within seconds while
+the VPS heartbeat is fresh, and takes over if the VPS has been silent for 24 h.
+
+**Moving the load to Windows.** When ingest takes more than `MAX_RUNTIME_MIN`, or needs
+more than `MAX_BACKLOG` Whisper runs, you get an ntfy push. To switch, run
+`setup_windows_task.ps1 -Primary` and set `HOST_ROLE=standby` on the VPS. No code
+changes are needed.
+
+## Routines
+
+Set up with `/schedule` in Claude Code, on the repo `financial_research_data`, with the
+Notion and Gmail connectors attached and `NTFY_TOPIC` set as an environment variable:
+
+| Routine | Cron (Europe/Berlin) | Prompt |
+|---|---|---|
+| research-digest | `0 7 * * *` | `prompts/routines/digest.md` |
+| research-regime | `0 9 * * 6` | `prompts/routines/regime.md` |
+| research-pitch | `0 9 1 * *` | `prompts/routines/pitch.md` |
+
+To change the next REGIME/PITCH run's parameters, drop `key: value` lines into
+`prompts/overrides/regime.md` or `pitch.md` in the data repo.
+
+## Install (development)
 
 ```bash
-# Python
-python -m podcast_summarizer
-
-# Windows one-click
-run.bat
+poetry install --with dev          # or: pip install -e .
+pytest
 ```
 
----
-
-## Output structure
-
-```
-episodes/
-└── streetsignals/
-    ├── EpisodeTitle_streetsignals.mp3
-    ├── EpisodeTitle_streetsignals.meta.json
-    ├── EpisodeTitle_streetsignals.txt          ← transcript
-    └── EpisodeTitle_streetsignals_2026-06-07_summary.txt
-```
-
-Re-running skips already-downloaded MP3s and already-transcribed episodes.
-
----
-
-## Custom Ollama model
-
-A pre-tuned analyst persona is included (`llama3_analyst.Modelfile`):
-
-```bash
-ollama create llama3_analyst -f llama3_analyst.Modelfile
-```
-
-Then set `LLM_MODEL=llama3_analyst` in `.env`.
+`faster-whisper` is the default engine. It bundles its own audio decoding, so ffmpeg is
+not needed. The old `openai-whisper` (PyTorch) is the optional extra
+`pip install -e ".[openai-whisper]"`, with `WHISPER_ENGINE=openai`.

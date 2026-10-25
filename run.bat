@@ -1,4 +1,5 @@
 @echo off
 cd /d "%~dp0"
-python -m podcast_summarizer
+.venv\Scripts\python.exe -m podcast_summarizer ingest
+.venv\Scripts\python.exe -m podcast_summarizer status
 pause

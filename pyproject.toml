@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "podcast-summarizer"
-version = "0.1.0"
+version = "0.2.0"
 description = "Podcast transcription and summarization tool"
 authors = ["fstuelzebach"]
 readme = "README.md"
@@ -8,29 +8,42 @@ packages = [{ include = "podcast_summarizer" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-openai-whisper = "^20250625"
+faster-whisper = "^1.1"
 feedparser = "^6.0"
 requests = "^2.31"
 python-dotenv = "^1.0"
+tomli = { version = "^2.0", python = "<3.11" }
+openai-whisper = { version = "^20250625", optional = true }
 anthropic = { version = "^0.40", optional = true }
 
+# Only pulled in by the `openai-whisper` extra (fallback engine).
 # Intel Macs: PyTorch stopped shipping x86_64 macOS wheels after 2.2.2, and newer
 # llvmlite (numba) has none either. These caps apply only there; other platforms are unchanged.
 torch = [
-    { version = "2.2.2", markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'" },
-    { version = "*", markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'" },
+    { version = "2.2.2", optional = true, markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'" },
+    { version = "*", optional = true, markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'" },
 ]
 numpy = [
     { version = "<2", markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'" },
     { version = "*", markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'" },
 ]
 llvmlite = [
-    { version = "<0.45", markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'" },
+    { version = "<0.45", optional = true, markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'" },
+    { version = "*", optional = true, markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'" },
+]
+
+# faster-whisper's VAD uses onnxruntime; its newest releases dropped Intel-Mac wheels.
+onnxruntime = [
+    { version = "<1.24", markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'" },
     { version = "*", markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'" },
 ]
 
 [tool.poetry.extras]
 claude = ["anthropic"]
+openai-whisper = ["openai-whisper", "torch", "llvmlite"]
+
+[tool.poetry.scripts]
+podcast-summarizer = "podcast_summarizer.__main__:main"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0"

@@ -1,0 +1,39 @@
+# Podcast sources for `python -m podcast_summarizer ingest`.
+#
+# key        = folder name under episodes/ and filename suffix (keep stable — renaming
+#              re-downloads everything)
+# house      = research house; the briefing/REGIME prompts treat one house as one voice
+# num_episodes = how many of the newest feed entries to check per run
+
+[defaults]
+num_episodes = 3
+
+[podcasts.streetsignals]
+url = "https://omny.fm/shows/street-signals/playlists/podcast.rss"
+house = "State Street"
+enabled = true
+
+[podcasts.atanyrate]
+url = ""   # TODO: add the At Any Rate feed URL
+house = "J.P. Morgan"
+enabled = false
+
+[podcasts.globaldatapod]
+url = "https://feed.podbean.com/globaldatapod/feed.xml"
+house = "J.P. Morgan"
+enabled = false
+
+[podcasts.macrotradingfloor]
+url = "https://feeds.megaphone.fm/ALFINVESTMENTSTRATEGYBV2974145286"
+house = "Macro Trading Floor"
+enabled = false
+
+[podcasts.howardmarks]
+url = "https://rss.art19.com/the-memo-by-howard-marks"
+house = "Oaktree"
+enabled = false
+
+[podcasts.saxomarketcall]
+url = "https://feed.podbean.com/saxostrats/feed.xml"
+house = "Saxo"
+enabled = false
